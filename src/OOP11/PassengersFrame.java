@@ -3,14 +3,15 @@ package OOP11;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
+import java.awt.Image;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
-import 
-
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 /**
  *
  * @author Alfie
@@ -19,11 +20,16 @@ public class PassengersFrame extends javax.swing.JFrame {
         Statement st;
         ResultSet rs;
         String  query;
+        
+        private String path;
+        private ImageIcon icon;
+        
+        private final ConnectDB con;
     /**
      * Creates new form Passengers
      */
     public PassengersFrame() {
-        st = null;
+        con = new ConnectDB();
         initComponents();
         setTitle("Passenger Records");
         setLocationRelativeTo(null);
@@ -303,8 +309,8 @@ public class PassengersFrame extends javax.swing.JFrame {
             File selected = chooser.getSelectedFile();
             path =selected.getAbsolutePath();
             icon = new ImageIcon(path);
-            image i =icon.getImage().getScaledInstance(image.getWidth(),image.getHeight(),Image.SCALE_SMOOTH);
-            image.setIcon(new ImageIcon(i));
+            Image i =icon.getImage().getScaledInstance(lblPhoto.getWidth(),lblPhoto.getHeight(),Image.SCALE_SMOOTH);
+            lblPhoto.setIcon(new ImageIcon(i));
         }
         
     }//GEN-LAST:event_lblPhotoMouseClicked
@@ -318,11 +324,10 @@ public class PassengersFrame extends javax.swing.JFrame {
         String Nationality = txtNationality.getText();
         String PassportNumber = txtPassport.getText();
 
-
-        String query = "INSERT INTO passengers VALUES ('"+PassengerID+"','"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+Nationality+"','"+PassportNumber+"')";
+        query = "INSERT INTO passengers VALUES ('"+PassengerID+"','"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+Nationality+"','"+PassportNumber+"')";
         
         try{
-            st.executeUpdate(query);
+            con.statement1.executeUpdate(query);
             JOptionPane.showMessageDialog(this, "Information Saved Succesfully");
         } catch (SQLException ex){
             ex.printStackTrace();
