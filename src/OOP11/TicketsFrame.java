@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -18,11 +19,12 @@ public class TicketsFrame extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     String query;
+    Connect con;
     /**
      * Creates new form Tickets
      */
     public TicketsFrame() {
-        st = null;
+        con = new Connect();
         initComponents();
         setTitle("Ticket Booking");
         setLocationRelativeTo(null);
@@ -206,11 +208,13 @@ public class TicketsFrame extends javax.swing.JFrame {
         int PassengerID = Integer.parseInt(txtPassengerID.getText());
         String SeatNumber = txtSeatNumber.getText();
         String Class = txtClass.getText();
-        LocalDateTime BookingDate = LocalDateTime.parse(txtBookingDate.getText());
-        String query = "INSERT INTO tickets VALUES ('"+TicketID+"','"+FlightID+"','"+PassengerID+"','"+SeatNumber+"','"+Class+"','"+BookingDate+"')";
+        String inputDateTime = txtBookingDate.getText().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime BookingDate = LocalDateTime.parse(inputDateTime,formatter);
+        query = "INSERT INTO tickets VALUES ('"+TicketID+"','"+FlightID+"','"+PassengerID+"','"+SeatNumber+"','"+Class+"','"+BookingDate+"')";
         
          try{
-           st.executeUpdate(query);
+           con.st.executeUpdate(query);
             JOptionPane.showMessageDialog(this, "Ticket was Booked Successfully");
         } catch (SQLException ex){
             ex.printStackTrace();
@@ -242,7 +246,7 @@ public class TicketsFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             query ="SELECT * FROM tickets";
-            rs=st.executeQuery(query);
+            rs= con.st.executeQuery(query);
             if(rs.next()){
                 txtTicketID.setText(""+rs.getInt(1));
                 txtFlightID.setText(""+rs.getInt(2));

@@ -19,7 +19,6 @@ public class MenuFrame extends javax.swing.JFrame {
         initComponents();
         setTitle("Airport Management-Main Menu");
         setLocationRelativeTo(null);
-        
     }
 
     /**
@@ -155,7 +154,7 @@ public class MenuFrame extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         dispose();
-      new  Login().setVisible(true);
+//        new Login().setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketsActionPerformed

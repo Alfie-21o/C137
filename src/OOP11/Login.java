@@ -3,54 +3,30 @@ package OOP11;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 /**
  *
  * @author Alfie
  */
 public class Login extends javax.swing.JFrame {
-    Connection con;
-    Statement st;
-    PreparedStatement pst;
-    String cs, user, password, query;
-    ResultSet rs;
+    Connect con;
     MenuFrame menu;
     /**
      * Creates new form Login
      */
     public Login() {
-        initComponents();
-       menu= new MenuFrame();
-        con = null;
-	st = null;
-        cs = "jdbc:mysql://localhost:3306/airport.db";
-        user = "root";
-	password = "";
-        
+        con = new Connect();
+        menu = new MenuFrame();
         setLocationRelativeTo(null);
         setTitle("User Login");
-        connect(); 
 
+        initComponents();
     }
- 
-    private void connect(){
-       try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(cs,user,password);
-            st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = st.executeQuery("SELECT * FROM USERS;");
-        }
-       catch (SQLException | ClassNotFoundException ex){
-            ex.printStackTrace(); 
-        }
-    }
+  
+     
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -168,35 +144,31 @@ public class Login extends javax.swing.JFrame {
       if(txtUsername.getText().equals(" ")) {
           JOptionPane.showMessageDialog(null,"Enter Username Please!");
       txtUsername.requestFocus();
-      return;
-      }
-      if(txtPassword.getText().equals(" ")) {
+      } else if(txtPassword.getText().equals(" ")) {
           JOptionPane.showMessageDialog(null,"Enter Password Please!");
           txtPassword.requestFocus();
-          return;
-      }
-       try {
-           query="SELECT * FROM USERS WHERE Username='"+txtUsername.getText()+"' AND Password='"+txtPassword.getText()+"'";
-         rs =st.executeQuery(query);
-           if(rs.first()){
-               //JOptionPane.showMessageDialog(null,"Login Successful!");
-  //call the object
-  menu.Main();
-  this.dispose();
-    }//GEN-LAST:event_btnLoginActionPerformed
- else{
-               JOptionPane.showMessageDialog(null,"Failed to Login!");
-               txtUsername.setText("");
-               txtPassword.setText("");
-               txtUsername.requestFocus();
-           }
-       }
-       catch(SQLException ex) {
-           ex.printStackTrace();
-           
-       }
-    }
+      } else {
+        try {
+            String query="SELECT * FROM USERS WHERE Username='"+username+"' AND Password='"+password+"'";
+            ResultSet rs =con.st.executeQuery(query);
+            if(rs.first()){
+            //JOptionPane.showMessageDialog(null,"Login Successful!");
+             menu.Main();
+             this.dispose();
+             }else{
+                JOptionPane.showMessageDialog(null,"Failed to Login!");
+                txtUsername.setText("");
+                txtPassword.setText("");
+                txtUsername.requestFocus();
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
 
+        }
+      }
+    }//GEN-LAST:event_btnLoginActionPerformed
+         
+ 
     private void chkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPasswordActionPerformed
         // TODO add your handling code here:
      

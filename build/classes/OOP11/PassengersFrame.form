@@ -68,8 +68,8 @@
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblPassport" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblNationality" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblNationality" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblPassport" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -139,11 +139,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="txtNationality" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblNationality" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
+                  <Component id="lblPassport" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblPassport" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblNationality" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtPassport" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="33" max="32767" attributes="0"/>
@@ -210,14 +210,14 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblNationality">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Nationality"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblPassport">
       <Properties>
         <Property name="text" type="java.lang.String" value="Passport no."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblNationality">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nationality"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPassengerID">
@@ -249,6 +249,13 @@
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblPhoto">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
+          </Border>
+        </Property>
+      </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblPhotoMouseClicked"/>
       </Events>

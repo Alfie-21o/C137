@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author Alfie
@@ -17,11 +18,13 @@ public class FlightsFrame extends javax.swing.JFrame {
     Statement st;
     String query;
     ResultSet rs;
+    Connect con;
 
     /**
      * Creates new form Flights
      */
     public FlightsFrame() {
+        con = new Connect();
         initComponents();
         setTitle("Flight Management");
         setLocationRelativeTo(null);
@@ -210,7 +213,7 @@ public class FlightsFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
          try {
             if(rs.first()){
-                 txtFlightID.setText(""+rs.getInt(1));
+                txtFlightID.setText(""+rs.getInt(1));
                 txtFlightNumber.setText(rs.getString(2));
                 txtAirportID.setText(""+rs.getString(3));
                 txtDeparture.setText(""+rs.getDate(4));
@@ -239,17 +242,21 @@ public class FlightsFrame extends javax.swing.JFrame {
         int FlightID = Integer.parseInt(txtFlightID.getText());
         String FlightNumber =  txtFlightNumber.getText();
         int AirportID= Integer.parseInt(txtAirportID.getText());
-        LocalDateTime Departure = LocalDateTime.parse(txtDeparture.getText());
-        LocalDateTime Arrival = LocalDateTime.parse(txtArrival.getText());
+        String inputDateTime = txtDeparture.getText().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime Departure = LocalDateTime.parse(inputDateTime,formatter);
+        String inputDateTime1 = txtArrival.getText().trim();
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime Arrival = LocalDateTime.parse(inputDateTime1,formatter1);
         String Status =txtStatus.getText();
         int AircraftID= Integer.parseInt(txtAircraftID.getText());
         
 
 
-        String query = "INSERT INTO flights VALUES ('"+FlightID+"','"+FlightNumber+"','"+AirportID+"','"+Departure+"','"+Arrival+"','"+Status+"'"+AircraftID+"')";
+        query = "INSERT INTO flights VALUES ('"+FlightID+"','"+FlightNumber+"','"+AirportID+"','"+Departure+"','"+Arrival+"','"+Status+"'"+AircraftID+"')";
         
         try{
-            st.executeUpdate(query);
+            con.st.executeUpdate(query);
             JOptionPane.showMessageDialog(this, "Saved Succesfully");
         } catch (SQLException ex){
             ex.printStackTrace();
@@ -261,7 +268,7 @@ public class FlightsFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             query = "SELECT * FROM flights WHERE FlightID ='"+Integer.parseInt(txtFlightID.getText())+"'";
-                rs=st.executeQuery(query);
+                rs = con.st.executeQuery(query);
             if(rs.first()){
                 txtFlightID.setText(""+rs.getInt(1));
                 txtFlightNumber.setText(rs.getString(2));

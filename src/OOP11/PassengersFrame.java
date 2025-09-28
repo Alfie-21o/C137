@@ -3,33 +3,32 @@ package OOP11;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-import java.awt.Image;
-import java.io.File;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import java.io.File;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 /**
  *
  * @author Alfie
  */
 public class PassengersFrame extends javax.swing.JFrame {
-        Statement st;
-        ResultSet rs;
-        String  query;
-        
-        private String path;
-        private ImageIcon icon;
-        
-        private final ConnectDB con;
+    Statement st;
+    ResultSet rs;
+    String  query;
+    private String path;
+    private ImageIcon icon;
+    Connect con;
     /**
      * Creates new form Passengers
      */
     public PassengersFrame() {
-        con = new ConnectDB();
+        con = new Connect();
         initComponents();
         setTitle("Passenger Records");
         setLocationRelativeTo(null);
@@ -51,8 +50,8 @@ public class PassengersFrame extends javax.swing.JFrame {
         lblDateOfBirth = new javax.swing.JLabel();
         lblGender = new javax.swing.JLabel();
         cmbGender = new javax.swing.JComboBox<>();
-        lblNationality = new javax.swing.JLabel();
         lblPassport = new javax.swing.JLabel();
+        lblNationality = new javax.swing.JLabel();
         txtPassengerID = new javax.swing.JTextField();
         txtFirstName = new javax.swing.JTextField();
         txtLastName = new javax.swing.JTextField();
@@ -93,9 +92,9 @@ public class PassengersFrame extends javax.swing.JFrame {
             }
         });
 
-        lblNationality.setText("Nationality");
-
         lblPassport.setText("Passport no.");
+
+        lblNationality.setText("Nationality");
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +110,7 @@ public class PassengersFrame extends javax.swing.JFrame {
             }
         });
 
+        lblPhoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblPhotoMouseClicked(evt);
@@ -182,8 +182,8 @@ public class PassengersFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblPassport)
-                                            .addComponent(lblNationality))
+                                            .addComponent(lblNationality)
+                                            .addComponent(lblPassport))
                                         .addGap(57, 57, 57)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(txtNationality)
@@ -233,10 +233,10 @@ public class PassengersFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNationality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNationality, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPassport, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassport)
+                    .addComponent(lblNationality)
                     .addComponent(txtPassport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -264,8 +264,8 @@ public class PassengersFrame extends javax.swing.JFrame {
                 txtFirstName.setText(rs.getString(2));
                 txtLastName.setText(rs.getString(3));
                 txtDateOfBirth.setText(""+rs.getDate(4));
-                txtNationality.setText(rs.getString(5));
-                txtPassport.setText(rs.getString(6));
+                txtPassport.setText(rs.getString(5));
+                txtNationality.setText(rs.getString(6));
                 
             }
         } catch (SQLException ex){
@@ -283,8 +283,8 @@ public class PassengersFrame extends javax.swing.JFrame {
                 txtFirstName.setText(rs.getString(2));
                 txtLastName.setText(rs.getString(3));
                 txtDateOfBirth.setText(""+rs.getDate(4));
-                txtNationality.setText(rs.getString(5));
-                txtPassport.setText(rs.getString(6));
+                txtPassport.setText(rs.getString(5));
+                txtNationality.setText(rs.getString(6));
 
                 
             }
@@ -307,7 +307,7 @@ public class PassengersFrame extends javax.swing.JFrame {
         int choise = chooser.showOpenDialog(null);
         if(choise ==JFileChooser.APPROVE_OPTION){
             File selected = chooser.getSelectedFile();
-            path =selected.getAbsolutePath();
+            path = selected.getAbsolutePath();
             icon = new ImageIcon(path);
             Image i =icon.getImage().getScaledInstance(lblPhoto.getWidth(),lblPhoto.getHeight(),Image.SCALE_SMOOTH);
             lblPhoto.setIcon(new ImageIcon(i));
@@ -321,13 +321,14 @@ public class PassengersFrame extends javax.swing.JFrame {
         String FirstName = txtFirstName.getText();
         String LastName = txtLastName.getText();
         LocalDate DateOfBirth = LocalDate.parse(txtDateOfBirth.getText());
-        String Nationality = txtNationality.getText();
         String PassportNumber = txtPassport.getText();
+        String Nationality = txtNationality.getText();
 
-        query = "INSERT INTO passengers VALUES ('"+PassengerID+"','"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+Nationality+"','"+PassportNumber+"')";
+
+         query = "INSERT INTO passengers VALUES ('"+PassengerID+"','"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+PassportNumber+"','"+Nationality+"')";
         
         try{
-            con.statement1.executeUpdate(query);
+            con.st.executeUpdate(query);
             JOptionPane.showMessageDialog(this, "Information Saved Succesfully");
         } catch (SQLException ex){
             ex.printStackTrace();
@@ -339,14 +340,14 @@ public class PassengersFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             query = "SELECT * FROM passengers WHERE PassengerID ='"+Integer.parseInt(txtPassengerID.getText())+"'";
-                rs=st.executeQuery(query);
+                rs = con.st.executeQuery(query);
             if(rs.first()){
                 txtPassengerID.setText(""+rs.getInt(1));
                 txtFirstName.setText(rs.getString(2));
                 txtLastName.setText(rs.getString(3));
                 txtDateOfBirth.setText(""+rs.getDate(4));
-                txtNationality.setText(rs.getString(5));
-                txtPassport.setText(rs.getString(6));
+                txtPassport.setText(rs.getString(5));
+                txtNationality.setText(rs.getString(6));
                 
             }
             else {
@@ -364,15 +365,16 @@ public class PassengersFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int PassengerID= Integer.parseInt(txtPassengerID.getText());
         try {
-            query = "DELETE * FROM passengers WHERE PassengerID ='"+Integer.parseInt(txtPassengerID.getText())+"'";
-                st.executeUpdate(query);
+           
+             query = "DELETE * FROM passengers WHERE PassengerID ='"+Integer.parseInt(txtPassengerID.getText())+"'";
+                con.st.executeUpdate(query);
             JOptionPane.showMessageDialog(null,"Record Deleted");
                 txtPassengerID.setText("");
                 txtFirstName.setText("");
                 txtLastName.setText("");
                 txtDateOfBirth.setText("");
-                txtNationality.setText("");
                 txtPassport.setText("");
+                txtNationality.setText("");
                 
                 txtPassengerID.requestFocus();
 
@@ -443,3 +445,4 @@ public class PassengersFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtPassport;
     // End of variables declaration//GEN-END:variables
 }
+

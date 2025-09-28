@@ -7,7 +7,8 @@ package OOP11;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -15,17 +16,17 @@ import java.time.LocalDateTime;
  * @author Alfie
  */
 public class PaymentsFrame extends javax.swing.JFrame {
-    Statement st;
-
+    Connect con;
 
     /**
      * Creates new form PaymentsFrame
      */
     public PaymentsFrame() {
-        st = null;
+        con = new Connect();
         initComponents();
         setTitle(" Ticket Payment");
         setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -168,11 +169,13 @@ public class PaymentsFrame extends javax.swing.JFrame {
         int TicketID = Integer.parseInt(txtTicketID.getText());
         double Amount = Double.parseDouble(txtAmount.getText());
         String Method = txtMethod.getText();
-        LocalDateTime Date = LocalDateTime.parse(txtDate.getText());
+        String inputDateTime = txtDate.getText().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate Date = LocalDate.parse(inputDateTime,formatter);
         String query = "INSERT INTO payments VALUES ('"+PaymentID+"','"+TicketID+"','"+Amount+"','"+Method+"','"+Date+"')";
         
         try{
-            st.executeUpdate(query);
+            con.st.executeUpdate(query);
             JOptionPane.showMessageDialog(this, "Your Payment was Successful");
         } catch (SQLException ex){
             ex.printStackTrace();
