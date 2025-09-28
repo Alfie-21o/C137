@@ -28,7 +28,12 @@ public class PassengersFrame extends javax.swing.JFrame {
      * Creates new form Passengers
      */
     public PassengersFrame() {
+        try{
         con = new Connect();
+        rs = con.st.executeQuery("select * from passengers");
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
         initComponents();
         setTitle("Passenger Records");
         setLocationRelativeTo(null);

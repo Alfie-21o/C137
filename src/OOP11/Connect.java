@@ -24,7 +24,7 @@ public class Connect {
     public Connect(){
         con = null;
 	st = null;
-        cs = "jdbc:mysql://localhost:3306/airport.db";
+        cs = "jdbc:mysql://localhost:3306/airportdb";
         user = "root";
 	password = "";
         
