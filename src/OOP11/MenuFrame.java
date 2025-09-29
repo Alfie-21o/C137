@@ -32,7 +32,6 @@ public class MenuFrame extends javax.swing.JFrame {
 
         jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
         lblName = new javax.swing.JLabel();
-        BtnFlights = new javax.swing.JButton();
         btnTickets = new javax.swing.JButton();
         btnPassengers = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
@@ -52,16 +51,8 @@ public class MenuFrame extends javax.swing.JFrame {
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("Welcome to the Airport Management System ");
 
-        BtnFlights.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        BtnFlights.setText("Flights");
-        BtnFlights.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnFlightsActionPerformed(evt);
-            }
-        });
-
         btnTickets.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        btnTickets.setText("Tickets");
+        btnTickets.setText("My Tickets");
         btnTickets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTicketsActionPerformed(evt);
@@ -69,7 +60,7 @@ public class MenuFrame extends javax.swing.JFrame {
         });
 
         btnPassengers.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        btnPassengers.setText("Passengers");
+        btnPassengers.setText("Browse Flights");
         btnPassengers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPassengersActionPerformed(evt);
@@ -116,18 +107,19 @@ public class MenuFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnTickets)
-                    .addComponent(BtnFlights))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPassengers, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(69, 69, 69))
+                .addComponent(btnPassengers)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnTickets)
+                .addGap(95, 95, 95))
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblName)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(lblName))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,16 +128,11 @@ public class MenuFrame extends javax.swing.JFrame {
                 .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnFlights)
-                    .addComponent(btnPassengers))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnTickets)
-                        .addGap(34, 34, 34))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnLogout)
-                        .addGap(42, 42, 42))))
+                    .addComponent(btnPassengers)
+                    .addComponent(btnTickets))
+                .addGap(26, 26, 26)
+                .addComponent(btnLogout)
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         pack();
@@ -154,7 +141,7 @@ public class MenuFrame extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         dispose();
-//        new Login().setVisible(true);
+        new Login().setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketsActionPerformed
@@ -170,14 +157,6 @@ public class MenuFrame extends javax.swing.JFrame {
         Passengers.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPassengersActionPerformed
-
-    private void BtnFlightsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFlightsActionPerformed
-        // TODO add your handling code here:
-        FlightsFrame Flights = new FlightsFrame();
-        Flights.setVisible(true);
-        this.dispose();
-         
-    }//GEN-LAST:event_BtnFlightsActionPerformed
 
     private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
         // TODO add your handling code here:
@@ -225,7 +204,6 @@ public class MenuFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnFlights;
     private javax.swing.JMenu MnFile;
     private javax.swing.JMenu MnHelp;
     private javax.swing.JButton btnLogout;
