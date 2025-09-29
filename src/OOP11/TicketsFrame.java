@@ -24,7 +24,13 @@ public class TicketsFrame extends javax.swing.JFrame {
      * Creates new form Tickets
      */
     public TicketsFrame() {
-        con = new Connect();
+        try{
+            con = new Connect();
+            rs = con.st.executeQuery("select * from tickets");
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        
         initComponents();
         setTitle("Ticket Booking");
         setLocationRelativeTo(null);

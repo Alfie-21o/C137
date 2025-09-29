@@ -4,9 +4,7 @@ package OOP11;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import javax.swing.JFileChooser;
@@ -18,8 +16,6 @@ import java.awt.Image;
  * @author Alfie
  */
 public class PassengersFrame extends javax.swing.JFrame {
-    Statement st;
-    ResultSet rs;
     String  query;
     private String path;
     private ImageIcon icon;
@@ -28,12 +24,7 @@ public class PassengersFrame extends javax.swing.JFrame {
      * Creates new form Passengers
      */
     public PassengersFrame() {
-        try{
-            con = new Connect();
-            rs = con.st.executeQuery("select * from passengers");
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+        con = new Connect();
         
         initComponents();
         
@@ -50,39 +41,38 @@ public class PassengersFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtusername1 = new javax.swing.JTextField();
+        lblusername1 = new javax.swing.JLabel();
         btnHome = new javax.swing.JButton();
-        lblPassengerID = new javax.swing.JLabel();
         lblFirstName = new javax.swing.JLabel();
         lblLastName = new javax.swing.JLabel();
         lblDateOfBirth = new javax.swing.JLabel();
         lblGender = new javax.swing.JLabel();
-        cmbGender = new javax.swing.JComboBox<>();
         lblPassport = new javax.swing.JLabel();
         lblNationality = new javax.swing.JLabel();
-        txtPassengerID = new javax.swing.JTextField();
         txtFirstName = new javax.swing.JTextField();
         txtLastName = new javax.swing.JTextField();
         txtDateOfBirth = new javax.swing.JTextField();
         txtNationality = new javax.swing.JTextField();
         txtPassport = new javax.swing.JTextField();
-        btnSave = new javax.swing.JButton();
-        btnFind = new javax.swing.JButton();
+        btnRegister = new javax.swing.JButton();
         lblPhoto = new javax.swing.JLabel();
-        btnFirst = new javax.swing.JButton();
-        btnPrevious = new javax.swing.JButton();
-        btnLast = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        txtusername = new javax.swing.JTextField();
+        lblusername = new javax.swing.JLabel();
+        txtpassword = new javax.swing.JTextField();
+        lblpassword = new javax.swing.JLabel();
+        cmbGender = new javax.swing.JComboBox<>();
+
+        lblusername1.setText("LastName");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnHome.setText("Home");
+        btnHome.setText("Cancel");
         btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHomeActionPerformed(evt);
             }
         });
-
-        lblPassengerID.setText("PassengerID");
 
         lblFirstName.setText("FirstName");
 
@@ -92,28 +82,14 @@ public class PassengersFrame extends javax.swing.JFrame {
 
         lblGender.setText("Gender");
 
-        cmbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F" }));
-        cmbGender.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbGenderActionPerformed(evt);
-            }
-        });
-
         lblPassport.setText("Passport no.");
 
         lblNationality.setText("Nationality");
 
-        btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
-        btnFind.setText("Find");
-        btnFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFindActionPerformed(evt);
+                btnRegisterActionPerformed(evt);
             }
         });
 
@@ -124,187 +100,121 @@ public class PassengersFrame extends javax.swing.JFrame {
             }
         });
 
-        btnFirst.setText("First");
-        btnFirst.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFirstActionPerformed(evt);
-            }
-        });
+        lblusername.setText("Username");
 
-        btnPrevious.setText("Previous");
+        lblpassword.setText("Password");
 
-        btnLast.setText("Last");
-        btnLast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLastActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
+        cmbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnFind)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnFirst)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnPrevious)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnLast)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDelete)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblLastName)
+                            .addComponent(lblFirstName))
+                        .addGap(68, 68, 68)
+                        .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(txtLastName))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblDateOfBirth)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnHome)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNationality)
+                                    .addComponent(lblGender))
+                                .addGap(64, 64, 64)
+                                .addComponent(txtPassport, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lblusername)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(121, 121, 121)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblPassengerID)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblLastName)
-                                            .addComponent(lblFirstName))))
-                                .addGap(58, 58, 58)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtFirstName, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                                    .addComponent(txtPassengerID)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addComponent(txtLastName))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(9, 9, 9)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblNationality)
-                                            .addComponent(lblPassport))
-                                        .addGap(57, 57, 57)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtNationality)
-                                            .addComponent(txtPassport, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblGender)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblDateOfBirth)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                                        .addComponent(txtDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))))
+                                        .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtusername, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lblPassport)
+                                .addGap(57, 57, 57)
+                                .addComponent(txtNationality))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lblpassword)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(121, 121, 121)
+                                    .addComponent(txtpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(123, 123, 123)
+                .addComponent(btnRegister)
+                .addGap(44, 44, 44)
+                .addComponent(btnHome)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(btnHome))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(117, 117, 117)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblFirstName)
+                            .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassengerID)
-                    .addComponent(txtPassengerID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFirstName)
-                    .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLastName)
                     .addComponent(txtLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDateOfBirth)
                     .addComponent(txtDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblGender)
                     .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblusername)
+                    .addComponent(txtusername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblpassword)
+                    .addComponent(txtpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNationality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPassport, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNationality)
                     .addComponent(txtPassport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
-                    .addComponent(btnFind)
-                    .addComponent(btnFirst)
-                    .addComponent(btnPrevious)
-                    .addComponent(btnLast)
-                    .addComponent(btnDelete))
+                    .addComponent(btnRegister)
+                    .addComponent(btnHome))
                 .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGenderActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbGenderActionPerformed
-
-    private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
-        // TODO add your handling code here:
-  try {
-            if(rs.first()){
-                txtPassengerID.setText(""+rs.getInt(1));
-                txtFirstName.setText(rs.getString(2));
-                txtLastName.setText(rs.getString(3));
-                txtDateOfBirth.setText(""+rs.getDate(4));
-                txtPassport.setText(rs.getString(5));
-                txtNationality.setText(rs.getString(6));
-                
-            }
-        } catch (SQLException ex){
-            ex.printStackTrace();
-        }
-
-
-    }//GEN-LAST:event_btnFirstActionPerformed
-
-    private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
-        // TODO add your handling code here:
-        try {
-            if(rs.last()){
-                txtPassengerID.setText(""+rs.getInt(1));
-                txtFirstName.setText(rs.getString(2));
-                txtLastName.setText(rs.getString(3));
-                txtDateOfBirth.setText(""+rs.getDate(4));
-                txtPassport.setText(rs.getString(5));
-                txtNationality.setText(rs.getString(6));
-
-                
-            }
-        } catch (SQLException ex){
-            ex.printStackTrace();
-        }
-
-    }//GEN-LAST:event_btnLastActionPerformed
-
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         // TODO add your handling code here:
         dispose();
-        new MenuFrame().setVisible(true);
+        new Login().setVisible(true);
 
     }//GEN-LAST:event_btnHomeActionPerformed
 
@@ -319,77 +229,32 @@ public class PassengersFrame extends javax.swing.JFrame {
             Image i =icon.getImage().getScaledInstance(lblPhoto.getWidth(),lblPhoto.getHeight(),Image.SCALE_SMOOTH);
             lblPhoto.setIcon(new ImageIcon(i));
         }
-        
     }//GEN-LAST:event_lblPhotoMouseClicked
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        int PassengerID= Integer.parseInt(txtPassengerID.getText());
         String FirstName = txtFirstName.getText();
         String LastName = txtLastName.getText();
+        String Username = txtusername.getText();
+        String Password = txtpassword.getText();
+        String gender = cmbGender.getSelectedItem().toString();
         LocalDate DateOfBirth = LocalDate.parse(txtDateOfBirth.getText());
         String PassportNumber = txtPassport.getText();
         String Nationality = txtNationality.getText();
 
-
-         query = "INSERT INTO passengers VALUES ('"+PassengerID+"','"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+PassportNumber+"','"+Nationality+"')";
+        query = "INSERT INTO passengers(FirstName, LastName, DateOfBirth, PassportNumber, Nationality, Username, Password, Gender, ImagePath) VALUES('"+FirstName+"','"+LastName+"','"+DateOfBirth+"','"+PassportNumber+"','"+Nationality+"','"+Username+"','"+Password+"','"+gender+"','"+path+"')";
         
         try{
-            con.st.executeUpdate(query);
-            JOptionPane.showMessageDialog(this, "Information Saved Succesfully");
-        } catch (SQLException ex){
-            ex.printStackTrace();
-        }
-
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        // TODO add your handling code here:
-        try {
-            query = "SELECT * FROM passengers WHERE PassengerID ='"+Integer.parseInt(txtPassengerID.getText())+"'";
-                rs = con.st.executeQuery(query);
-            if(rs.first()){
-                txtPassengerID.setText(""+rs.getInt(1));
-                txtFirstName.setText(rs.getString(2));
-                txtLastName.setText(rs.getString(3));
-                txtDateOfBirth.setText(""+rs.getDate(4));
-                txtPassport.setText(rs.getString(5));
-                txtNationality.setText(rs.getString(6));
-                
-            }
-            else {
-                JOptionPane.showMessageDialog(null,"Record not Found");
-                txtPassengerID.setText("");
-                txtPassengerID.requestFocus();
+            if(con.st.executeUpdate(query) == 1){
+                JOptionPane.showMessageDialog(this, "Information Saved Succesfully");
+                dispose();
+                new Login().setVisible(true);
             }
         } catch (SQLException ex){
             ex.printStackTrace();
         }
 
-    }//GEN-LAST:event_btnFindActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        int PassengerID= Integer.parseInt(txtPassengerID.getText());
-        try {
-           
-             query = "DELETE * FROM passengers WHERE PassengerID ='"+Integer.parseInt(txtPassengerID.getText())+"'";
-                con.st.executeUpdate(query);
-            JOptionPane.showMessageDialog(null,"Record Deleted");
-                txtPassengerID.setText("");
-                txtFirstName.setText("");
-                txtLastName.setText("");
-                txtDateOfBirth.setText("");
-                txtPassport.setText("");
-                txtNationality.setText("");
-                
-                txtPassengerID.requestFocus();
-
-            } catch (SQLException ex){
-                ex.printStackTrace();
-            } 
-        
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -428,28 +293,27 @@ public class PassengersFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnFind;
-    private javax.swing.JButton btnFirst;
     private javax.swing.JButton btnHome;
-    private javax.swing.JButton btnLast;
-    private javax.swing.JButton btnPrevious;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JComboBox<String> cmbGender;
     private javax.swing.JLabel lblDateOfBirth;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblNationality;
-    private javax.swing.JLabel lblPassengerID;
     private javax.swing.JLabel lblPassport;
     private javax.swing.JLabel lblPhoto;
+    private javax.swing.JLabel lblpassword;
+    private javax.swing.JLabel lblusername;
+    private javax.swing.JLabel lblusername1;
     private javax.swing.JTextField txtDateOfBirth;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtNationality;
-    private javax.swing.JTextField txtPassengerID;
     private javax.swing.JTextField txtPassport;
+    private javax.swing.JTextField txtpassword;
+    private javax.swing.JTextField txtusername;
+    private javax.swing.JTextField txtusername1;
     // End of variables declaration//GEN-END:variables
 }
 

@@ -24,7 +24,13 @@ public class FlightsFrame extends javax.swing.JFrame {
      * Creates new form Flights
      */
     public FlightsFrame() {
-        con = new Connect();
+        try{
+            con = new Connect();
+            rs = con.st.executeQuery("select * from flights");
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+       
         initComponents();
         setTitle("Flight Management");
         setLocationRelativeTo(null);
@@ -243,10 +249,10 @@ public class FlightsFrame extends javax.swing.JFrame {
         String FlightNumber =  txtFlightNumber.getText();
         int AirportID= Integer.parseInt(txtAirportID.getText());
         String inputDateTime = txtDeparture.getText().trim();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd HH:mm:ss");
         LocalDateTime Departure = LocalDateTime.parse(inputDateTime,formatter);
         String inputDateTime1 = txtArrival.getText().trim();
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime Arrival = LocalDateTime.parse(inputDateTime1,formatter1);
         String Status =txtStatus.getText();
         int AircraftID= Integer.parseInt(txtAircraftID.getText());
@@ -266,8 +272,9 @@ public class FlightsFrame extends javax.swing.JFrame {
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
         // TODO add your handling code here:
+        int FlightID= Integer.parseInt(txtFlightID.getText());
         try {
-            query = "SELECT * FROM flights WHERE FlightID ='"+Integer.parseInt(txtFlightID.getText())+"'";
+            query = "SELECT * FROM flights WHERE FlightID ='"+FlightID+"'";
                 rs = con.st.executeQuery(query);
             if(rs.first()){
                 txtFlightID.setText(""+rs.getInt(1));

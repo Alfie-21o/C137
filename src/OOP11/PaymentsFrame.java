@@ -5,9 +5,8 @@ package OOP11;
  */
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -170,8 +169,8 @@ public class PaymentsFrame extends javax.swing.JFrame {
         double Amount = Double.parseDouble(txtAmount.getText());
         String Method = txtMethod.getText();
         String inputDateTime = txtDate.getText().trim();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate Date = LocalDate.parse(inputDateTime,formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime Date = LocalDateTime.parse(inputDateTime,formatter);
         String query = "INSERT INTO payments VALUES ('"+PaymentID+"','"+TicketID+"','"+Amount+"','"+Method+"','"+Date+"')";
         
         try{
