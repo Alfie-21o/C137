@@ -36,9 +36,9 @@ public class Connect {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(cs,user,password);
             st =con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            System.out.println("✅ Database connected.");
+            System.out.println("Database connected.");
         } catch (SQLException | ClassNotFoundException e){
-            System.err.println("❌ Database connection failed: " + e.getMessage());
+            System.err.println("Database connection failed: " + e.getMessage());
         }
             
     }
