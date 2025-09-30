@@ -5,6 +5,7 @@
 package Passengers;
 
 import Public.Login;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +21,32 @@ public class MenuFrame extends javax.swing.JFrame {
         initComponents();
         setTitle("Airport Management-Main Menu");
         setLocationRelativeTo(null);
+        
+        try {
+            // Load the image from resources
+            ImageIcon icon = new ImageIcon(getClass().getResource("/assets/airplane.png"));
+            // Scale the image to desired dimensions (e.g., 64x64)
+            java.awt.Image img = icon.getImage();
+            java.awt.Image scaledImg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            btnPassengers.setIcon(new ImageIcon(scaledImg));
+            
+            ImageIcon icon1 = new ImageIcon(getClass().getResource("/assets/ticket.png"));
+            // Scale the image to desired dimensions (e.g., 64x64)
+            java.awt.Image img1 = icon1.getImage();
+            java.awt.Image scaledImg1 = img1.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            btnTickets.setIcon(new ImageIcon(scaledImg1));
+            
+            ImageIcon icon2 = new ImageIcon(getClass().getResource("/assets/logout.png"));
+            // Scale the image to desired dimensions (e.g., 64x64)
+            java.awt.Image img2 = icon2.getImage();
+            java.awt.Image scaledImg2 = img2.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            btnLogout.setIcon(new ImageIcon(scaledImg2));
+        } catch (Exception e) {
+            System.out.println("Icon not found: " + e.getMessage());
+        }
+        
+//        btnPassengers.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+//        btnPassengers.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     }
 
     /**
@@ -47,13 +74,19 @@ public class MenuFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Airport Management-Main Menu");
+        setSize(new java.awt.Dimension(600, 400));
 
         lblName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("Welcome to the Airport Management System ");
 
         btnTickets.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/ticket.png"))); // NOI18N
         btnTickets.setText("My Tickets");
+        btnTickets.setBorder(null);
+        btnTickets.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTickets.setPreferredSize(new java.awt.Dimension(64, 64));
+        btnTickets.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnTickets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTicketsActionPerformed(evt);
@@ -61,7 +94,13 @@ public class MenuFrame extends javax.swing.JFrame {
         });
 
         btnPassengers.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnPassengers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/airplane.png"))); // NOI18N
         btnPassengers.setText("Browse Flights");
+        btnPassengers.setBorder(null);
+        btnPassengers.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPassengers.setPreferredSize(new java.awt.Dimension(64, 64));
+        btnPassengers.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/airplane.png"))); // NOI18N
+        btnPassengers.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnPassengers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPassengersActionPerformed(evt);
@@ -69,7 +108,12 @@ public class MenuFrame extends javax.swing.JFrame {
         });
 
         btnLogout.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/logout.png"))); // NOI18N
         btnLogout.setText("Logout");
+        btnLogout.setBorder(null);
+        btnLogout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLogout.setPreferredSize(new java.awt.Dimension(64, 64));
+        btnLogout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogoutActionPerformed(evt);
@@ -107,33 +151,29 @@ public class MenuFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(btnPassengers)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTickets)
-                .addGap(95, 95, 95))
+                .addContainerGap()
+                .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(lblName))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(85, 85, 85)
+                .addComponent(btnPassengers, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPassengers)
-                    .addComponent(btnTickets))
-                .addGap(26, 26, 26)
-                .addComponent(btnLogout)
-                .addContainerGap(75, Short.MAX_VALUE))
+                    .addComponent(btnPassengers, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,7 +212,7 @@ public class MenuFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public  void Main( ) {
+    public  static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
