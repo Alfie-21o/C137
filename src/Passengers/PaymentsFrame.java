@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package OOP11;
+package Passengers;
 
+import Public.Connect;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 
@@ -11,15 +12,15 @@ import java.sql.SQLException;
  *
  * @author sqmson
  */
-public class FlightDetails extends javax.swing.JFrame {
+public class PaymentsFrame extends javax.swing.JFrame {
     
-//    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FlightDetails.class.getName());
+//    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PaymentsFrame.class.getName());
     private final Connect con;
     private int flightId;
     /**
      * Creates new form FlightDetails
      */
-    public FlightDetails(int flightId, Connect con) {
+    public PaymentsFrame(int flightId, Connect con) {
         this.flightId = flightId;
         this.con = con;
         
@@ -200,7 +201,7 @@ public class FlightDetails extends javax.swing.JFrame {
 //        //</editor-fold>
 //
 //        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(() -> new FlightDetails().setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new PaymentsFrame().setVisible(true));
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

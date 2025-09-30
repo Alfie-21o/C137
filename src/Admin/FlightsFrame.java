@@ -3,8 +3,8 @@ package Admin;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-import OOP11.Connect;
-import OOP11.MenuFrame;
+import Public.Connect;
+import Passengers.MenuFrame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;

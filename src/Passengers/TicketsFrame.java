@@ -1,8 +1,9 @@
-package OOP11;
+package Passengers;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+import Public.Connect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -231,8 +232,8 @@ public class TicketsFrame extends javax.swing.JFrame {
 
     private void btnPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentsActionPerformed
         // TODO add your handling code here:
-        PaymentsFrame  Payments= new PaymentsFrame();
-        Payments.setVisible(true);
+//        PaymentsFrame  Payments= new PaymentsFrame();
+//        Payments.setVisible(true);
         this.dispose();
        
     }//GEN-LAST:event_btnPaymentsActionPerformed
