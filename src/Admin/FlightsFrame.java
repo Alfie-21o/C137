@@ -1,12 +1,12 @@
-package OOP11;
+package Admin;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
+import OOP11.Connect;
+import OOP11.MenuFrame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
  * @author Alfie
  */
 public class FlightsFrame extends javax.swing.JFrame {
-    Statement st;
     String query;
     ResultSet rs;
     Connect con;

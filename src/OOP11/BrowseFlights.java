@@ -4,19 +4,83 @@
  */
 package OOP11;
 
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author Alfie
+ * @author sqmson
  */
 public class BrowseFlights extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BrowseFlights.class.getName());
 
+    Connect con;
     /**
      * Creates new form BrowseFlights
      */
     public BrowseFlights() {
         initComponents();
+        
+        con = new Connect();
+        loadAirlines();
+        loadAirports();
+        addTableListeners();
     }
+    
+    private void loadAirlines() {
+        try {
+            con.pst = con.con.prepareStatement("SELECT AirlineID, Name FROM airlines");
+            con.rs = con.pst.executeQuery();
+            cmbAirline.removeAllItems();
+            while (con.rs.next()) {
+                cmbAirline.addItem(con.rs.getInt("AirlineID") + " - " + con.rs.getString("Name"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading airlines: " + e.getMessage());
+        }
+    }
+    
+    private void loadAirports() {
+        try {
+            con.pst = con.con.prepareStatement("SELECT AirportID, Name FROM airports");
+            con.rs = con.pst.executeQuery();
+            cmbAirport.removeAllItems();
+            while (con.rs.next()) {
+                cmbAirport.addItem(con.rs.getInt("AirportID") + " - " + con.rs.getString("Name"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading airports: " + e.getMessage());
+        }
+    }
+    
+    private void addTableListeners() {
+        // enables view flights details button when a flight is selected
+        tblFlights.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                btnViewDetails.setEnabled(tblFlights.getSelectedRow() != -1);
+            }
+        });
 
+        // opens flights details when flight is double-clicked
+        tblFlights.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2 && tblFlights.getSelectedRow() != -1) {
+                    openFlightDetails();
+                }
+            }
+        });
+    }
+    
+    private void openFlightDetails() {
+        int row = tblFlights.getSelectedRow();
+        if (row == -1) return;
+
+        int flightId = (int) tblFlights.getValueAt(row, 0);
+        FlightDetails detailsFrame = new FlightDetails(flightId, con);
+        detailsFrame.setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,30 +91,143 @@ public class BrowseFlights extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        cmbAirline = new javax.swing.JComboBox<>();
+        cmbAirport = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        btnSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblFlights = new javax.swing.JTable();
+        btnViewDetails = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Something");
+        jLabel1.setText("Select Airline");
+
+        cmbAirline.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbAirport.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel2.setText("Select Airport");
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        tblFlights.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblFlights);
+
+        btnViewDetails.setText("View Flight Details");
+        btnViewDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDetailsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(275, Short.MAX_VALUE))
+                .addGap(406, 406, 406)
+                .addComponent(btnViewDetails)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(29, 29, 29)
+                        .addComponent(cmbAirline, 0, 347, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addGap(29, 29, 29)
+                        .addComponent(cmbAirport, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSearch)
+                        .addGap(402, 402, 402))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(233, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cmbAirline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(cmbAirport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnSearch)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addComponent(btnViewDetails)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        try {
+            String airline = cmbAirline.getSelectedItem().toString().split(" - ")[0];
+            String airport = cmbAirport.getSelectedItem().toString().split(" - ")[0];
+
+            con.query = """
+                SELECT f.FlightID, f.FlightNumber, f.DepartureTime, f.ArrivalTime, f.Status
+                FROM flights f
+                JOIN aircrafts a ON f.AircraftID = a.AircraftID
+                WHERE a.Airline = ? AND f.ArrivalAirportID = ?
+            """;
+
+            con.pst = con.con.prepareStatement(con.query);
+            con.pst.setInt(1, Integer.parseInt(airline));
+            con.pst.setInt(2, Integer.parseInt(airport));
+            con.rs = con.pst.executeQuery();
+
+            DefaultTableModel model = new DefaultTableModel(
+                new String[]{"FlightID", "FlightNumber", "Departure", "Arrival", "Status"}, 0
+            );
+
+            while (con.rs.next()) {
+                model.addRow(new Object[]{
+                    con.rs.getInt("FlightID"),
+                    con.rs.getString("FlightNumber"),
+                    con.rs.getString("DepartureTime"),
+                    con.rs.getString("ArrivalTime"),
+                    con.rs.getString("Status")
+                });
+            }
+
+            tblFlights.setModel(model);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Search error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnViewDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDetailsActionPerformed
+        // TODO add your handling code here:
+        openFlightDetails();
+    }//GEN-LAST:event_btnViewDetailsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,26 +245,23 @@ public class BrowseFlights extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BrowseFlights.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BrowseFlights.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BrowseFlights.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BrowseFlights.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new BrowseFlights().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new BrowseFlights().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnViewDetails;
+    private javax.swing.JComboBox<String> cmbAirline;
+    private javax.swing.JComboBox<String> cmbAirport;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblFlights;
     // End of variables declaration//GEN-END:variables
 }

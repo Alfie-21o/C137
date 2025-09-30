@@ -15,18 +15,18 @@ import java.sql.SQLException;
  * @author Alfie
  */
 public class Connect {
-    Connection con;
-    Statement st;
-    PreparedStatement pst;
-    String cs, user, password, query;
-    ResultSet rs;
+    public Connection con;
+    public Statement st;
+    public PreparedStatement pst;
+    public String query;
+    public ResultSet rs;
+    
+    private final String cs, user, password;
     
     public Connect(){
-        con = null;
-	st = null;
-        cs = "jdbc:mysql://localhost:3306/airport_db";
+        cs = "jdbc:mysql://localhost:3306/airportdb";
         user = "root";
-	password = "";
+        password = "";
         
         getConnection();
     }
@@ -36,8 +36,9 @@ public class Connect {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(cs,user,password);
             st =con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            System.out.println("✅ Database connected.");
         } catch (SQLException | ClassNotFoundException e){
-            e.printStackTrace();
+            System.err.println("❌ Database connection failed: " + e.getMessage());
         }
             
     }
