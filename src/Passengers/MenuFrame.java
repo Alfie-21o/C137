@@ -13,11 +13,15 @@ import javax.swing.JOptionPane;
  * @author Alfie
  */
 public class MenuFrame extends javax.swing.JFrame {
-
+    public int userId;
     /**
      * Creates new form MenuFrame
+     * @param userId
      */
-    public MenuFrame() {
+    public MenuFrame(int userId) {
+        this.userId = userId;
+        System.out.println("ID:"+userId);
+        
         initComponents();
         setTitle("Airport Management-Main Menu");
         setLocationRelativeTo(null);
@@ -27,26 +31,23 @@ public class MenuFrame extends javax.swing.JFrame {
             ImageIcon icon = new ImageIcon(getClass().getResource("/assets/airplane.png"));
             // Scale the image to desired dimensions (e.g., 64x64)
             java.awt.Image img = icon.getImage();
-            java.awt.Image scaledImg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            java.awt.Image scaledImg = img.getScaledInstance(96,96, java.awt.Image.SCALE_SMOOTH);
             btnPassengers.setIcon(new ImageIcon(scaledImg));
             
             ImageIcon icon1 = new ImageIcon(getClass().getResource("/assets/ticket.png"));
             // Scale the image to desired dimensions (e.g., 64x64)
             java.awt.Image img1 = icon1.getImage();
-            java.awt.Image scaledImg1 = img1.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            java.awt.Image scaledImg1 = img1.getScaledInstance(96,96, java.awt.Image.SCALE_SMOOTH);
             btnTickets.setIcon(new ImageIcon(scaledImg1));
             
             ImageIcon icon2 = new ImageIcon(getClass().getResource("/assets/logout.png"));
             // Scale the image to desired dimensions (e.g., 64x64)
             java.awt.Image img2 = icon2.getImage();
-            java.awt.Image scaledImg2 = img2.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            java.awt.Image scaledImg2 = img2.getScaledInstance(96,96, java.awt.Image.SCALE_SMOOTH);
             btnLogout.setIcon(new ImageIcon(scaledImg2));
         } catch (Exception e) {
             System.out.println("Icon not found: " + e.getMessage());
         }
-        
-//        btnPassengers.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-//        btnPassengers.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     }
 
     /**
@@ -80,7 +81,7 @@ public class MenuFrame extends javax.swing.JFrame {
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("Welcome to the Airport Management System ");
 
-        btnTickets.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnTickets.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         btnTickets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/ticket.png"))); // NOI18N
         btnTickets.setText("My Tickets");
         btnTickets.setBorder(null);
@@ -93,7 +94,7 @@ public class MenuFrame extends javax.swing.JFrame {
             }
         });
 
-        btnPassengers.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnPassengers.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         btnPassengers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/airplane.png"))); // NOI18N
         btnPassengers.setText("Browse Flights");
         btnPassengers.setBorder(null);
@@ -107,7 +108,7 @@ public class MenuFrame extends javax.swing.JFrame {
             }
         });
 
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
         btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/logout.png"))); // NOI18N
         btnLogout.setText("Logout");
         btnLogout.setBorder(null);
@@ -187,15 +188,15 @@ public class MenuFrame extends javax.swing.JFrame {
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketsActionPerformed
         // TODO add your handling code here:
-        TicketsFrame Tickets = new TicketsFrame();
+        TicketsFrame Tickets = new TicketsFrame(userId);
         Tickets.setVisible(true);
-                this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnTicketsActionPerformed
 
     private void btnPassengersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPassengersActionPerformed
         // TODO add your handling code here:
-        PassengersFrame Passengers = new PassengersFrame();
-        Passengers.setVisible(true);
+        BrowseFlights f = new BrowseFlights(userId);
+        f.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPassengersActionPerformed
 
@@ -208,41 +209,6 @@ public class MenuFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(null,"ALFIE SAFE TRAVELS");
     }//GEN-LAST:event_mniAboutActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public  static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MenuFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnFile;

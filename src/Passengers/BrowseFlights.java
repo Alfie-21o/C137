@@ -14,14 +14,16 @@ import javax.swing.table.DefaultTableModel;
  * @author sqmson
  */
 public class BrowseFlights extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BrowseFlights.class.getName());
-
+    int userId;
     Connect con;
+//    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BrowseFlights.class.getName());
     /**
      * Creates new form BrowseFlights
+     * @param userId
      */
-    public BrowseFlights() {
+    public BrowseFlights(int userId) {
+        this.userId = userId;
+        
         initComponents();
         
         con = new Connect();
@@ -30,6 +32,8 @@ public class BrowseFlights extends javax.swing.JFrame {
         loadAirlines();
         loadAirports();
         addTableListeners();
+        
+        setLocationRelativeTo(null);
     }
     
     private void loadAirlines() {
@@ -138,7 +142,7 @@ public class BrowseFlights extends javax.swing.JFrame {
         if (row == -1) return;
 
         int flightId = (int) tblFlights.getValueAt(row, 0);
-        PaymentsFrame detailsFrame = new PaymentsFrame(flightId, con);
+        PaymentsFrame detailsFrame = new PaymentsFrame(flightId, con, userId);
         this.dispose();
         detailsFrame.setVisible(true);
     }
@@ -263,31 +267,6 @@ public class BrowseFlights extends javax.swing.JFrame {
         // TODO add your handling code here:
         openFlightDetails();
     }//GEN-LAST:event_btnViewDetailsActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new BrowseFlights().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;

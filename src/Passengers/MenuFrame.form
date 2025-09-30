@@ -115,7 +115,7 @@
     <Component class="javax.swing.JButton" name="btnTickets">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="2"/>
+          <Font name="Segoe UI" size="18" style="2"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/assets/ticket.png"/>
@@ -137,7 +137,7 @@
     <Component class="javax.swing.JButton" name="btnPassengers">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="2"/>
+          <Font name="Segoe UI" size="18" style="2"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/assets/airplane.png"/>
@@ -162,7 +162,7 @@
     <Component class="javax.swing.JButton" name="btnLogout">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="2"/>
+          <Font name="Segoe UI" size="18" style="2"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/assets/logout.png"/>

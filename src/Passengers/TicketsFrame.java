@@ -4,37 +4,65 @@ package Passengers;
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 import Public.Connect;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Alfie
  */
 public class TicketsFrame extends javax.swing.JFrame {
-    Statement st;
-    ResultSet rs;
-    String query;
     Connect con;
+    private int userId;
     /**
      * Creates new form Tickets
      */
-    public TicketsFrame() {
-        try{
-            con = new Connect();
-            rs = con.st.executeQuery("select * from tickets");
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+    public TicketsFrame(int userId) {
+        this.userId = userId;
+        con = new Connect();
         
         initComponents();
-        setTitle("Ticket Booking");
+        setTitle("My Ticket");
         setLocationRelativeTo(null);
+        
+        btnCancel.setEnabled(false);
+
+        tblTickets.getSelectionModel().addListSelectionListener(e -> {
+            boolean selected = tblTickets.getSelectedRow() != -1;
+            btnCancel.setEnabled(selected);
+        });
+        
+        DefaultTableModel model = new DefaultTableModel(
+        new String[]{"TicketID", "Flight Number", "Departure", "Arrival", "Class", "Seat", "Booking Date", "Status"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make table read-only
+            }
+        };
+        tblTickets.setModel(model);
+
+        try {
+            con.query = "SELECT t.TicketID, f.FlightNumber, f.DepartureTime, f.ArrivalTime, " +
+                    "t.Class, t.SeatNumber, t.BookingDate, f.Status " +
+                    "FROM tickets t JOIN flights f ON t.FlightID = f.FlightID";
+            con.rs = con.st.executeQuery(con.query);
+
+            while (con.rs.next()) {
+                model.addRow(new Object[]{
+                    con.rs.getInt("TicketID"),
+                    con.rs.getString("FlightNumber"),
+                    con.rs.getString("DepartureTime"),
+                    con.rs.getString("ArrivalTime"),
+                    con.rs.getString("Class"),
+                    con.rs.getString("SeatNumber"),
+                    con.rs.getString("BookingDate"),
+                    con.rs.getString("Status")
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error loading tickets: " + ex.getMessage());
+        }
+
     }
 
     /**
@@ -46,52 +74,66 @@ public class TicketsFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTicketID = new javax.swing.JLabel();
-        lblFlightID = new javax.swing.JLabel();
-        lblPassengerID = new javax.swing.JLabel();
-        lblSeatNumber = new javax.swing.JLabel();
-        lblClass = new javax.swing.JLabel();
-        lblBookingDate = new javax.swing.JLabel();
-        txtTicketID = new javax.swing.JTextField();
-        txtFlightID = new javax.swing.JTextField();
-        txtPassengerID = new javax.swing.JTextField();
-        btnPayments = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
-        btnNext = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblTickets = new javax.swing.JTable();
         btnCancel = new javax.swing.JButton();
-        txtSeatNumber = new javax.swing.JTextField();
-        txtClass = new javax.swing.JTextField();
-        txtBookingDate = new javax.swing.JTextField();
-        btnHome = new javax.swing.JButton();
+        btnLast = new javax.swing.JButton();
+        btnFirst = new javax.swing.JButton();
+        btnNext = new javax.swing.JButton();
+        btnPrevious = new javax.swing.JButton();
+        btnHome4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblTicketID.setText("TicketID");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("My Tickets");
 
-        lblFlightID.setText("FlightID");
+        tblTickets.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblTickets);
 
-        lblPassengerID.setText("PassengerID");
-
-        lblSeatNumber.setText("Seat No.");
-
-        lblClass.setText("Class");
-
-        lblBookingDate.setText("BookingDate");
-
-        btnPayments.setText("Payments");
-        btnPayments.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setBackground(new java.awt.Color(153, 0, 0));
+        btnCancel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancel.setText("Terminate");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPaymentsActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
 
-        btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnLast.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        btnLast.setForeground(new java.awt.Color(0, 0, 0));
+        btnLast.setText("Last");
+        btnLast.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnLastActionPerformed(evt);
             }
         });
 
+        btnFirst.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        btnFirst.setForeground(new java.awt.Color(0, 0, 0));
+        btnFirst.setText("First");
+        btnFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstActionPerformed(evt);
+            }
+        });
+
+        btnNext.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        btnNext.setForeground(new java.awt.Color(0, 0, 0));
         btnNext.setText("Next");
         btnNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,23 +141,21 @@ public class TicketsFrame extends javax.swing.JFrame {
             }
         });
 
-        btnCancel.setText("Cancel");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+        btnPrevious.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        btnPrevious.setForeground(new java.awt.Color(0, 0, 0));
+        btnPrevious.setText("Previous");
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
+                btnPreviousActionPerformed(evt);
             }
         });
 
-        txtBookingDate.addActionListener(new java.awt.event.ActionListener() {
+        btnHome4.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        btnHome4.setForeground(new java.awt.Color(0, 0, 0));
+        btnHome4.setText("Back");
+        btnHome4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBookingDateActionPerformed(evt);
-            }
-        });
-
-        btnHome.setText("Home");
-        btnHome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHomeActionPerformed(evt);
+                btnHome4ActionPerformed(evt);
             }
         });
 
@@ -124,211 +164,157 @@ public class TicketsFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(16, 16, 16)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblFlightID)
-                                .addComponent(lblPassengerID)
-                                .addComponent(lblSeatNumber)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(9, 9, 9)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnHome)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(lblTicketID)))
-                            .addGap(29, 29, 29)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtClass, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtPassengerID, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                                    .addComponent(txtFlightID)
-                                    .addComponent(txtTicketID)
-                                    .addComponent(txtSeatNumber))
-                                .addComponent(txtBookingDate, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblBookingDate)
-                                .addGap(17, 17, 17))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnPayments)
-                                    .addComponent(lblClass))))
-                        .addGap(12, 12, 12)
-                        .addComponent(btnSave)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnFirst)
                         .addGap(18, 18, 18)
                         .addComponent(btnNext)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCancel)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addComponent(btnPrevious)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLast)
+                        .addGap(480, 480, 480)
+                        .addComponent(btnHome4)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnHome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTicketID)
-                    .addComponent(txtTicketID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFlightID)
-                    .addComponent(txtFlightID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassengerID)
-                    .addComponent(txtPassengerID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSeatNumber)
-                    .addComponent(txtSeatNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblClass)
-                    .addComponent(txtClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBookingDate)
-                    .addComponent(txtBookingDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPayments)
-                    .addComponent(btnSave)
-                    .addComponent(btnNext)
-                    .addComponent(btnCancel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnFirst)
+                        .addComponent(btnNext)
+                        .addComponent(btnPrevious)
+                        .addComponent(btnLast))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCancel)
+                        .addComponent(btnHome4)))
+                .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        int TicketID = Integer.parseInt(txtTicketID.getText());
-        int FlightID = Integer.parseInt(txtFlightID.getText());
-        int PassengerID = Integer.parseInt(txtPassengerID.getText());
-        String SeatNumber = txtSeatNumber.getText();
-        String Class = txtClass.getText();
-        String inputDateTime = txtBookingDate.getText().trim();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime BookingDate = LocalDateTime.parse(inputDateTime,formatter);
-        query = "INSERT INTO tickets VALUES ('"+TicketID+"','"+FlightID+"','"+PassengerID+"','"+SeatNumber+"','"+Class+"','"+BookingDate+"')";
-        
-         try{
-           con.st.executeUpdate(query);
-            JOptionPane.showMessageDialog(this, "Ticket was Booked Successfully");
-        } catch (SQLException ex){
-            ex.printStackTrace();
+        int row = tblTickets.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a ticket first!");
+            return;
         }
+        int ticketId = (int) tblTickets.getValueAt(row, 0); // TicketID is column 0
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to terminate this ticket?",
+                "Confirm Termination", JOptionPane.YES_NO_OPTION);
 
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                con.query = "UPDATE tickets SET Status='Cancelled' WHERE TicketID=" + ticketId;
+                con.st.executeUpdate(con.query);
+                JOptionPane.showMessageDialog(this, "Ticket terminated successfully.");
+                ((DefaultTableModel) tblTickets.getModel()).removeRow(row);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error cancelling ticket: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
 
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentsActionPerformed
+    private void btnHome4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHome4ActionPerformed
         // TODO add your handling code here:
-//        PaymentsFrame  Payments= new PaymentsFrame();
-//        Payments.setVisible(true);
+        new MenuFrame(userId).setVisible(true);
         this.dispose();
-       
-    }//GEN-LAST:event_btnPaymentsActionPerformed
+    }//GEN-LAST:event_btnHome4ActionPerformed
 
-    private void txtBookingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookingDateActionPerformed
+    private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBookingDateActionPerformed
+        if (tblTickets.getRowCount() > 0) {
+        tblTickets.setRowSelectionInterval(0, 0);
+        tblTickets.scrollRectToVisible(tblTickets.getCellRect(0, 0, true));
+    }
 
-    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+    }//GEN-LAST:event_btnFirstActionPerformed
+
+    private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
         // TODO add your handling code here:
-        dispose();
-        new MenuFrame().setVisible(true);
-
-    }//GEN-LAST:event_btnHomeActionPerformed
+        int rowCount = tblTickets.getRowCount();
+        if (rowCount > 0) {
+            tblTickets.setRowSelectionInterval(rowCount - 1, rowCount - 1);
+            tblTickets.scrollRectToVisible(tblTickets.getCellRect(rowCount - 1, 0, true));
+        }
+    }//GEN-LAST:event_btnLastActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         // TODO add your handling code here:
-        try {
-            query ="SELECT * FROM tickets";
-            rs= con.st.executeQuery(query);
-            if(rs.next()){
-                txtTicketID.setText(""+rs.getInt(1));
-                txtFlightID.setText(""+rs.getInt(2));
-                txtPassengerID.setText(""+rs.getString(3));
-                txtSeatNumber.setText(rs.getString(4));
-                txtClass.setText(rs.getString(5));
-                txtBookingDate.setText(""+rs.getDate(6));
-            }
-        } catch (SQLException ex){
-            ex.printStackTrace();
+        int row = tblTickets.getSelectedRow();
+        if (row < tblTickets.getRowCount() - 1) {
+            tblTickets.setRowSelectionInterval(row + 1, row + 1);
+            tblTickets.scrollRectToVisible(tblTickets.getCellRect(row + 1, 0, true));
         }
-
     }//GEN-LAST:event_btnNextActionPerformed
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
         // TODO add your handling code here:
-        int confirm = JOptionPane.showConfirmDialog(null,"Are you sure you want to cancel booking?","Confirm Cancel",JOptionPane.YES_NO_OPTION);
-        if(confirm ==JOptionPane.YES_OPTION){
-            dispose();
+        int row = tblTickets.getSelectedRow();
+        if (row > 0) {
+            tblTickets.setRowSelectionInterval(row - 1, row - 1);
+            tblTickets.scrollRectToVisible(tblTickets.getCellRect(row - 1, 0, true));
         }
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnPreviousActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TicketsFrame().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(TicketsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(() -> {
+//            new TicketsFrame().setVisible(true);
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnFirst;
+    private javax.swing.JButton btnHome4;
+    private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNext;
-    private javax.swing.JButton btnPayments;
-    private javax.swing.JButton btnSave;
-    private javax.swing.JLabel lblBookingDate;
-    private javax.swing.JLabel lblClass;
-    private javax.swing.JLabel lblFlightID;
-    private javax.swing.JLabel lblPassengerID;
-    private javax.swing.JLabel lblSeatNumber;
-    private javax.swing.JLabel lblTicketID;
-    private javax.swing.JTextField txtBookingDate;
-    private javax.swing.JTextField txtClass;
-    private javax.swing.JTextField txtFlightID;
-    private javax.swing.JTextField txtPassengerID;
-    private javax.swing.JTextField txtSeatNumber;
-    private javax.swing.JTextField txtTicketID;
+    private javax.swing.JButton btnPrevious;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblTickets;
     // End of variables declaration//GEN-END:variables
 }
