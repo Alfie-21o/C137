@@ -6,6 +6,7 @@ package Admin;
 
 import Public.Connect;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +24,7 @@ public class Aircrafts extends javax.swing.JFrame {
     public Aircrafts() {
         initComponents();
         loadAirlines();
+        loadAircrafts();
     }
 
     private void loadAirlines() {
@@ -36,6 +38,39 @@ public class Aircrafts extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error loading airlines: " + e.getMessage());
+        }
+    }
+    private void loadAircrafts() {
+        try {
+            con.pst = con.con.prepareStatement(
+                    "SELECT a.AircraftID, a.Model, a.Capacity, al.Name AS AirlineName " +
+                    "FROM aircrafts a " +
+                    "JOIN airlines al ON a.Airline = al.AirlineID", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            con.rs = con.pst.executeQuery();
+
+            if (con.rs.next()) {
+                showCurrentRecord();
+            } else {
+                JOptionPane.showMessageDialog(this, "No aircrafts found.");
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading aircrafts: " + e.getMessage());
+        }
+    }
+    private void showCurrentRecord() {
+        try {
+            selectedAircraftID = con.rs.getInt("AircraftID");
+            txtModel.setText(con.rs.getString("Model"));
+            txtCapacity.setText(String.valueOf(con.rs.getInt("Capacity")));
+
+            // Select correct airline in combo
+            String airlineName = con.rs.getString("AirlineName");
+            cmbAirlines.setSelectedItem(airlineName);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error showing record: " + e.getMessage());
         }
     }
     /**
@@ -264,15 +299,35 @@ public class Aircrafts extends javax.swing.JFrame {
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
         // TODO add your handling code here:
-        
+        try {
+            if (con.rs.first()) {
+                showCurrentRecord();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnFirstActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         // TODO add your handling code here:
+        try {
+            if (!con.rs.isLast() && con.rs.next()) {
+                showCurrentRecord();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
         // TODO add your handling code here:
+        try {
+            if (!con.rs.isFirst() && con.rs.previous()) {
+                showCurrentRecord();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnPreviousActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -357,6 +412,13 @@ public class Aircrafts extends javax.swing.JFrame {
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
         // TODO add your handling code here:
+        try {
+            if (con.rs.last()) {
+                showCurrentRecord();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnLastActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
