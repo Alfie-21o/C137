@@ -423,6 +423,38 @@ public class Aircrafts extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        try {
+            if (selectedAircraftID == -1) {
+                JOptionPane.showMessageDialog(this, "No aircraft selected for deletion.");
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this aircraft?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Delete from database
+                con.pst = con.con.prepareStatement("DELETE FROM aircrafts WHERE AircraftID = ?");
+                con.pst.setInt(1, selectedAircraftID);
+                int rows = con.pst.executeUpdate();
+
+                if (rows > 0) {
+                    JOptionPane.showMessageDialog(this, "Aircraft deleted successfully!");
+
+                    // Refresh the ResultSet
+                    loadAircrafts();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No record deleted.");
+                }
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error deleting record: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
