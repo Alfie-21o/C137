@@ -16,6 +16,7 @@ public class Aircrafts extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Aircrafts.class.getName());
     Connect con = new Connect();
+    private int selectedAircraftID = -1;
     /**
      * Creates new form Aircrafts
      */
@@ -263,6 +264,7 @@ public class Aircrafts extends javax.swing.JFrame {
 
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnFirstActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
@@ -276,24 +278,79 @@ public class Aircrafts extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here
         try {
-            String model = txtModel.getText().trim();
-            String capacityStr = txtCapacity.getText().trim();
-            ComboItem selectedAirlines = (ComboItem) cmbAirlines.getSelectedItem();
-
-            if (model.isEmpty() || capacityStr.isEmpty() || cmbAirlines.getSelectedItem() == null) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields and select an airline.");
+            if (selectedAircraftID == -1) {
+                JOptionPane.showMessageDialog(this, "No aircraft selected for update.");
                 return;
             }
 
-            int capacity = Integer.parseInt(capacityStr);
-            con.rs.updateString("Model", model);
-            con.rs.updateInt("Capacity", capacity);
-            con.rs.updateInt("Airline", selectedAirlines.getId());
-            con.rs.updateRow();
+            String model = txtModel.getText().trim();
+            String capacityStr = txtCapacity.getText().trim();
+            String selectedName = (String) cmbAirlines.getSelectedItem();
 
-            JOptionPane.showMessageDialog(this, "Record updated successfully.");
+            // Start building update query
+            StringBuilder sql = new StringBuilder("UPDATE aircrafts SET ");
+            java.util.List<Object> params = new java.util.ArrayList<>();
 
-        } catch (SQLException | NumberFormatException ex) {
+            if (!model.isEmpty()) {
+                sql.append("Model = ?, ");
+                params.add(model);
+            }
+
+            if (!capacityStr.isEmpty()) {
+                try {
+                    int capacity = Integer.parseInt(capacityStr);
+                    if (capacity <= 0) throw new NumberFormatException();
+                    sql.append("Capacity = ?, ");
+                    params.add(capacity);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Capacity must be a positive integer.");
+                    return;
+                }
+            }
+
+            if (selectedName != null && !selectedName.equals("SELECT AIRLINE")) {
+                con.pst = con.con.prepareStatement("SELECT AirlineID FROM airlines WHERE Name = ? LIMIT 1");
+                con.pst.setString(1, selectedName);
+                con.rs = con.pst.executeQuery();
+                if (con.rs.next()) {
+                    int airlineID = con.rs.getInt("AirlineID");
+                    sql.append("Airline = ?, ");
+                    params.add(airlineID);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Selected airline not found.");
+                    return;
+                }
+            }
+
+            // If nothing to update
+            if (params.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please provide at least one field to update.");
+                return;
+            }
+
+            // Remove last comma and space
+            sql.setLength(sql.length() - 2);
+
+            // Add WHERE
+            sql.append(" WHERE AircraftID = ?");
+            params.add(selectedAircraftID);
+
+            // Prepare statement
+            con.pst = con.con.prepareStatement(sql.toString());
+
+            // Bind parameters
+            for (int i = 0; i < params.size(); i++) {
+                con.pst.setObject(i + 1, params.get(i));
+            }
+
+            int rows = con.pst.executeUpdate();
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(this, "Aircraft updated successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "No changes were made.");
+            }
+
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error updating record: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
