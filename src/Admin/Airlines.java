@@ -4,6 +4,10 @@
  */
 package Admin;
 
+import javax.swing.JOptionPane;
+import Public.Connect;
+import java.sql.SQLException;
+import java.sql.ResultSet;
 /**
  *
  * @author sqmson
@@ -11,12 +15,42 @@ package Admin;
 public class Airlines extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Airlines.class.getName());
-
+    Connect con = new Connect();
+    private int selectedAirlineID = -1;
     /**
      * Creates new form Airlines
      */
     public Airlines() {
+        setLocationRelativeTo(null);
+        
         initComponents();
+        loadAirlines();
+    }
+    
+    private void loadAirlines() {
+        try {
+            con.pst = con.con.prepareStatement(
+                "SELECT * FROM airlines ORDER BY AirlineID",
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY
+            );
+            con.rs = con.pst.executeQuery();
+            if (con.rs.next()) {
+                showCurrentRecord();
+            } else {
+                JOptionPane.showMessageDialog(this, "No airlines found.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading airlines: " + e.getMessage());
+        }
+    }
+    private void showCurrentRecord() {
+        try {
+            selectedAirlineID = con.rs.getInt("AirlineID");
+            jTextField1.setText(con.rs.getString("Name"));
+            jTextField2.setText(con.rs.getString("Country"));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error showing record: " + e.getMessage());
+        }
     }
 
     /**
@@ -58,6 +92,11 @@ public class Airlines extends javax.swing.JFrame {
         jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         btnFirst.setText("First");
+        btnFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstActionPerformed(evt);
+            }
+        });
 
         btnSave.setText("Add");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -67,14 +106,39 @@ public class Airlines extends javax.swing.JFrame {
         });
 
         btnNext.setText("Next");
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
         btnPrevious.setText("Previous");
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnLast.setText("Last");
+        btnLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLastActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,32 +211,149 @@ public class Airlines extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
+        String name = jTextField1.getText().trim();
+        String country = jTextField2.getText().trim();
+
+        if (name.isEmpty() || country.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Name and Country.");
+            return;
+        }
+
+        try {
+            con.pst = con.con.prepareStatement(
+                "INSERT INTO airlines (Name, Country) VALUES (?, ?)"
+            );
+            con.pst.setString(1, name);
+            con.pst.setString(2, country);
+            int rows = con.pst.executeUpdate();
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(this, "Airline added successfully!");
+                loadAirlines();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error adding airline: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
+        // TODO add your handling code here:
+         try {
+            if (con.rs.first()) showCurrentRecord();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnFirstActionPerformed
+
+    private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (con.rs.last()) showCurrentRecord();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnLastActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (!con.rs.isLast() && con.rs.next()) showCurrentRecord();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (!con.rs.isFirst() && con.rs.previous()) showCurrentRecord();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+         if (selectedAirlineID == -1) {
+            JOptionPane.showMessageDialog(this, "No airline selected.");
+            return;
+        }
+
+        try {
+            String newName = JOptionPane.showInputDialog(this, "Enter new Name:", jTextField1.getText());
+            String newCountry = JOptionPane.showInputDialog(this, "Enter new Country:", jTextField2.getText());
+
+            if (newName == null || newCountry == null) {
+                JOptionPane.showMessageDialog(this, "Update cancelled.");
+                return;
+            }
+
+            con.pst = con.con.prepareStatement(
+                "UPDATE airlines SET Name = ?, Country = ? WHERE AirlineID = ?"
+            );
+            con.pst.setString(1, newName);
+            con.pst.setString(2, newCountry);
+            con.pst.setInt(3, selectedAirlineID);
+
+            int rows = con.pst.executeUpdate();
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(this, "Airline updated!");
+                jTextField1.setText(newName);
+                jTextField2.setText(newCountry);
+                loadAirlines();
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error updating airline: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        if (selectedAirlineID == -1) {
+            JOptionPane.showMessageDialog(this, "No airline selected.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Delete this airline?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                con.pst = con.con.prepareStatement("DELETE FROM airlines WHERE AirlineID = ?");
+                con.pst.setInt(1, selectedAirlineID);
+                int rows = con.pst.executeUpdate();
+                if (rows > 0) {
+                    JOptionPane.showMessageDialog(this, "Airline deleted!");
+                    loadAirlines();
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error deleting airline: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Airlines().setVisible(true));
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+//            logger.log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(() -> new Airlines().setVisible(true));
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
