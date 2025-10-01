@@ -25,34 +25,16 @@ public class Aircrafts extends javax.swing.JFrame {
     }
 
     private void loadAirlines() {
-        try {
-            con.pst = con.con.prepareStatement("SELECT AirlineID, Name FROM airlines");
+       try {
+            con.pst = con.con.prepareStatement("SELECT Name FROM airlines ORDER BY Name");
             con.rs = con.pst.executeQuery();
             cmbAirlines.removeAllItems();
             cmbAirlines.addItem("SELECT AIRLINE");
             while (con.rs.next()) {
-                cmbAirlines.addItem(con.rs.getInt("AirlineID") + " - " + con.rs.getString("Name"));
+                cmbAirlines.addItem(con.rs.getString("Name"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error loading airlines: " + e.getMessage());
-        }
-    }
-    class ComboItem {
-        private String name;
-        private int id;
-
-        public ComboItem(String name, int id) {
-            this.name = name;
-            this.id = id;
-        }
-
-        @Override
-        public String toString() {
-            return name; // display in JComboBox
-        }
-
-        public int getId() {
-            return id;
         }
     }
     /**
@@ -229,25 +211,37 @@ public class Aircrafts extends javax.swing.JFrame {
         // TODO add your handling code here:
         String model = txtModel.getText().trim();
         String capacityStr = txtCapacity.getText().trim();
+        String selectedName = (String) cmbAirlines.getSelectedItem();
 
-        if (model.isEmpty() || capacityStr.isEmpty() || cmbAirlines.getSelectedItem() == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields");
+        if (model.isEmpty() || capacityStr.isEmpty() || selectedName == null || selectedName.equals("SELECT AIRLINE")) {
+            JOptionPane.showMessageDialog(this, "Please fill all fields and select an airline.");
             return;
         }
 
         int capacity;
         try {
             capacity = Integer.parseInt(capacityStr);
+            if (capacity <= 0) throw new NumberFormatException("capacity <= 0");
         } catch (NumberFormatException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Capacity must be a number");
+            JOptionPane.showMessageDialog(this, "Capacity must be a positive integer.");
             return;
         }
 
-        int airlineID = ((ComboItem) cmbAirlines.getSelectedItem()).getId();
-
-        String sql = "INSERT INTO aircrafts (Model, Capacity, Airline) VALUES (?, ?, ?)";
-
         try {
+            // Query to get the AirlineID for the selected name
+            con.pst = con.con.prepareStatement("SELECT AirlineID FROM airlines WHERE Name = ? LIMIT 1");
+            con.pst.setString(1, selectedName);
+            con.rs = con.pst.executeQuery();
+
+            if (!con.rs.next()) {
+                JOptionPane.showMessageDialog(this, "Selected airline not found in database.");
+                return;
+            }
+
+            int airlineID = con.rs.getInt("AirlineID");
+
+            // Insert new aircraft
+            String sql = "INSERT INTO aircrafts (Model, Capacity, Airline) VALUES (?, ?, ?)";
             con.pst = con.con.prepareStatement(sql);
             con.pst.setString(1, model);
             con.pst.setInt(2, capacity);
@@ -255,13 +249,15 @@ public class Aircrafts extends javax.swing.JFrame {
 
             int rows = con.pst.executeUpdate();
             if (rows > 0) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Aircraft added successfully!");
+                JOptionPane.showMessageDialog(this, "Aircraft added successfully!");
                 txtModel.setText("");
                 txtCapacity.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Insert failed. No rows affected.");
             }
 
         } catch (SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -279,29 +275,27 @@ public class Aircrafts extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here
-        
-    try {
-        String model = txtModel.getText().trim();
-        String capacityStr = txtCapacity.getText().trim();
-        ComboItem selectedAirlines = (ComboItem) cmbAirlines.getSelectedItem();
+        try {
+            String model = txtModel.getText().trim();
+            String capacityStr = txtCapacity.getText().trim();
+            ComboItem selectedAirlines = (ComboItem) cmbAirlines.getSelectedItem();
 
-        if (model.isEmpty() || capacityStr.isEmpty() || cmbAirlines.getSelectedItem() == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields and select an airline.");
-            return;
+            if (model.isEmpty() || capacityStr.isEmpty() || cmbAirlines.getSelectedItem() == null) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields and select an airline.");
+                return;
+            }
+
+            int capacity = Integer.parseInt(capacityStr);
+            con.rs.updateString("Model", model);
+            con.rs.updateInt("Capacity", capacity);
+            con.rs.updateInt("Airline", selectedAirlines.getId());
+            con.rs.updateRow();
+
+            JOptionPane.showMessageDialog(this, "Record updated successfully.");
+
+        } catch (SQLException | NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error updating record: " + ex.getMessage());
         }
-
-        int capacity = Integer.parseInt(capacityStr);
-        con.rs.updateString("Model", model);
-        con.rs.updateInt("Capacity", capacity);
-        con.rs.updateInt("Airline", selectedAirlines.getId());
-        con.rs.updateRow();
-
-        JOptionPane.showMessageDialog(this, "Record updated successfully.");
-
-    } catch (SQLException | NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Error updating record: " + ex.getMessage());
-    }
-
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
