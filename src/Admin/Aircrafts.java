@@ -300,9 +300,8 @@ public class Aircrafts extends javax.swing.JFrame {
     private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
         // TODO add your handling code here:
         try {
-            if (con.rs.first()) {
+            if (con.rs.first())
                 showCurrentRecord();
-            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -333,81 +332,62 @@ public class Aircrafts extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here
         try {
-            if (selectedAircraftID == -1) {
-                JOptionPane.showMessageDialog(this, "No aircraft selected for update.");
-                return;
-            }
-
-            String model = txtModel.getText().trim();
-            String capacityStr = txtCapacity.getText().trim();
-            String selectedName = (String) cmbAirlines.getSelectedItem();
-
-            // Start building update query
-            StringBuilder sql = new StringBuilder("UPDATE aircrafts SET ");
-            java.util.List<Object> params = new java.util.ArrayList<>();
-
-            if (!model.isEmpty()) {
-                sql.append("Model = ?, ");
-                params.add(model);
-            }
-
-            if (!capacityStr.isEmpty()) {
-                try {
-                    int capacity = Integer.parseInt(capacityStr);
-                    if (capacity <= 0) throw new NumberFormatException();
-                    sql.append("Capacity = ?, ");
-                    params.add(capacity);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Capacity must be a positive integer.");
-                    return;
-                }
-            }
-
-            if (selectedName != null && !selectedName.equals("SELECT AIRLINE")) {
-                con.pst = con.con.prepareStatement("SELECT AirlineID FROM airlines WHERE Name = ? LIMIT 1");
-                con.pst.setString(1, selectedName);
-                con.rs = con.pst.executeQuery();
-                if (con.rs.next()) {
-                    int airlineID = con.rs.getInt("AirlineID");
-                    sql.append("Airline = ?, ");
-                    params.add(airlineID);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Selected airline not found.");
-                    return;
-                }
-            }
-
-            // If nothing to update
-            if (params.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please provide at least one field to update.");
-                return;
-            }
-
-            // Remove last comma and space
-            sql.setLength(sql.length() - 2);
-
-            // Add WHERE
-            sql.append(" WHERE AircraftID = ?");
-            params.add(selectedAircraftID);
-
-            // Prepare statement
-            con.pst = con.con.prepareStatement(sql.toString());
-
-            // Bind parameters
-            for (int i = 0; i < params.size(); i++) {
-                con.pst.setObject(i + 1, params.get(i));
-            }
-
-            int rows = con.pst.executeUpdate();
-            if (rows > 0) {
-                JOptionPane.showMessageDialog(this, "Aircraft updated successfully!");
-            } else {
-                JOptionPane.showMessageDialog(this, "No changes were made.");
-            }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error updating record: " + ex.getMessage());
+        if (selectedAircraftID == -1) {
+            JOptionPane.showMessageDialog(this, "No aircraft selected for update.");
+            return;
         }
+
+        // Ask for new values
+        String newModel = JOptionPane.showInputDialog(this, "Enter new Model:", txtModel.getText());
+        String newCapacityStr = JOptionPane.showInputDialog(this, "Enter new Capacity:", txtCapacity.getText());
+        String newAirline = JOptionPane.showInputDialog(this, "Enter new Airline:", cmbAirlines.getSelectedItem());
+
+        if (newModel == null || newCapacityStr == null || newAirline == null) {
+            JOptionPane.showMessageDialog(this, "Update cancelled.");
+            return;
+        }
+
+        int newCapacity;
+        try {
+            newCapacity = Integer.parseInt(newCapacityStr.trim());
+            if (newCapacity <= 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Capacity must be a positive integer.");
+            return;
+        }
+
+        // Get AirlineID from name
+        con.pst = con.con.prepareStatement("SELECT AirlineID FROM airlines WHERE Name = ? LIMIT 1");
+        con.pst.setString(1, newAirline);
+        con.rs = con.pst.executeQuery();
+
+        if (!con.rs.next()) {
+            JOptionPane.showMessageDialog(this, "Airline not found.");
+            return;
+        }
+        int airlineID = con.rs.getInt("AirlineID");
+
+        // Run UPDATE
+        String sql = "UPDATE aircrafts SET Model = ?, Capacity = ?, Airline = ? WHERE AircraftID = ?";
+        con.pst = con.con.prepareStatement(sql);
+        con.pst.setString(1, newModel);
+        con.pst.setInt(2, newCapacity);
+        con.pst.setInt(3, airlineID);
+        con.pst.setInt(4, selectedAircraftID);
+
+        int rows = con.pst.executeUpdate();
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this, "Aircraft updated successfully!");
+            txtModel.setText(newModel);
+            txtCapacity.setText(String.valueOf(newCapacity));
+            cmbAirlines.setSelectedItem(newAirline);
+        } else {
+            JOptionPane.showMessageDialog(this, "Update failed.");
+        }
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error updating: " + ex.getMessage());
+    }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
