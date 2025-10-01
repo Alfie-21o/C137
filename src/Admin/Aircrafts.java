@@ -70,7 +70,7 @@ public class Aircrafts extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtCapacity = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        btnSave = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         btnFirst = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
@@ -98,24 +98,54 @@ public class Aircrafts extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Airline");
 
-        btnSave.setText("Add");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
         btnNext.setText("Next");
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
         btnFirst.setText("First");
+        btnFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstActionPerformed(evt);
+            }
+        });
 
         btnPrevious.setText("Previous");
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnLast.setText("Last");
+        btnLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLastActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         cmbAirlines.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cmbAirlines.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -140,7 +170,7 @@ public class Aircrafts extends javax.swing.JFrame {
                                         .addComponent(btnNext)
                                         .addGap(18, 18, 18)
                                         .addComponent(btnPrevious))
-                                    .addComponent(btnSave))
+                                    .addComponent(btnAdd))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(btnLast)
@@ -179,7 +209,7 @@ public class Aircrafts extends javax.swing.JFrame {
                     .addComponent(cmbAirlines, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
+                    .addComponent(btnAdd)
                     .addComponent(btnUpdate))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,7 +225,7 @@ public class Aircrafts extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         String model = txtModel.getText().trim();
         String capacityStr = txtCapacity.getText().trim();
@@ -233,7 +263,54 @@ public class Aircrafts extends javax.swing.JFrame {
         } catch (SQLException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
         }
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFirstActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here
+        
+    try {
+        String model = txtModel.getText().trim();
+        String capacityStr = txtCapacity.getText().trim();
+        ComboItem selectedAirlines = (ComboItem) cmbAirlines.getSelectedItem();
+
+        if (model.isEmpty() || capacityStr.isEmpty() || cmbAirlines.getSelectedItem() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields and select an airline.");
+            return;
+        }
+
+        int capacity = Integer.parseInt(capacityStr);
+        con.rs.updateString("Model", model);
+        con.rs.updateInt("Capacity", capacity);
+        con.rs.updateInt("Airline", selectedAirlines.getId());
+        con.rs.updateRow();
+
+        JOptionPane.showMessageDialog(this, "Record updated successfully.");
+
+    } catch (SQLException | NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Error updating record: " + ex.getMessage());
+    }
+
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLastActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -261,12 +338,12 @@ public class Aircrafts extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnFirst;
     private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrevious;
-    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbAirlines;
     private javax.swing.JLabel jLabel1;
