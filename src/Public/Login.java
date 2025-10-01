@@ -48,6 +48,8 @@ public class Login extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         btnRegister = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        Admin = new javax.swing.JMenu();
 
         jButton1.setText("jButton1");
 
@@ -114,6 +116,18 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Flight Ticket Booking System - Login");
 
+        Admin.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Admin.setText("Admin Dashboard");
+        Admin.setFont(new java.awt.Font("Gadugi", 1, 12)); // NOI18N
+        Admin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AdminMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(Admin);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,7 +181,7 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(btnLogin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRegister)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -205,7 +219,6 @@ public class Login extends javax.swing.JFrame {
             }
         }catch(SQLException ex) {
             System.err.println("Error: "+ex.getMessage());
-
         }
       }
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -238,6 +251,12 @@ public class Login extends javax.swing.JFrame {
         new PassengersFrame().setVisible(true);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void AdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AdminMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+        new Admin.AdminMenu().setVisible(true);
+    }//GEN-LAST:event_AdminMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -268,6 +287,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Admin;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnRegister;
@@ -275,6 +295,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPasswordField txtPassword;
